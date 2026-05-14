@@ -1,0 +1,60 @@
+import type { Transaction } from "../types/transaction";
+
+export const transactions: Transaction[] = [
+    {
+        id: 1,
+        title: "Salário",
+        amount: 2300,
+        type: "income",
+        category: "Salário",
+        date: "2026-05-05",
+    },
+    {
+        id: 2,
+        title: "Freelance landing page",
+        amount: 650,
+        type: "income",
+        category: "Freelance",
+        date: "2026-05-09",
+    },
+    {
+        id: 3,
+        title: "Mercado",
+        amount: 380,
+        type: "expense",
+        category: "Alimentação",
+        date: "2026-05-10",
+    },
+    {
+        id: 4,
+        title: "Transporte",
+        amount: 220,
+        type: "expense",
+        category: "Transporte",
+        date: "2026-05-11",
+    },
+    {
+        id: 5,
+        title: "Curso de tecnologia",
+        amount: 180,
+        type: "expense",
+        category: "Educação",
+        date: "2026-05-12",
+    },
+    {
+        id: 6,
+        title: "Assinaturas digitais",
+        amount: 79,
+        type: "expense",
+        category: "Lazer",
+        date: "2026-05-13",
+    },
+    {
+        id: 7,
+        title: "Investimento inicial",
+        amount: 250,
+        type: "income",
+        category: "Investimentos",
+        date: "2026-05-14",
+    },
+];
