@@ -12,7 +12,9 @@ function formatCurrency(value: number) {
 }
 
 function formatDate(date: string) {
-    return new Intl.DateTimeFormat("pt-BR").format(new Date(date));
+    return new Intl.DateTimeFormat("pt-BR", {
+        timeZone: "UTC",
+    }).format(new Date(date));
 }
 
 export function TransactionTable({ transactions }: TransactionTableProps) {
@@ -40,28 +42,36 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                     </thead>
 
                     <tbody>
-                        {transactions.map((transaction) => (
-                            <tr key={transaction.id}>
-                                <td>{transaction.title}</td>
-                                <td>{transaction.category}</td>
-                                <td>{formatDate(transaction.date)}</td>
-                                <td>
-                                    <span className={`badge ${transaction.type}`}>
-                                        {transaction.type === "income" ? "Entrada" : "Saída"}
-                                    </span>
-                                </td>
-                                <td
-                                    className={
-                                        transaction.type === "income"
-                                            ? "amount-income"
-                                            : "amount-expense"
-                                    }
-                                >
-                                    {transaction.type === "expense" ? "- " : "+ "}
-                                    {formatCurrency(transaction.amount)}
+                        {transactions.length > 0 ? (
+                            transactions.map((transaction) => (
+                                <tr key={transaction.id}>
+                                    <td>{transaction.title}</td>
+                                    <td>{transaction.category}</td>
+                                    <td>{formatDate(transaction.date)}</td>
+                                    <td>
+                                        <span className={`badge ${transaction.type}`}>
+                                            {transaction.type === "income" ? "Entrada" : "Saída"}
+                                        </span>
+                                    </td>
+                                    <td
+                                        className={
+                                            transaction.type === "income"
+                                                ? "amount-income"
+                                                : "amount-expense"
+                                        }
+                                    >
+                                        {transaction.type === "expense" ? "- " : "+ "}
+                                        {formatCurrency(transaction.amount)}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className="empty-state">
+                                    Nenhuma transação encontrada para este filtro.
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>

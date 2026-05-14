@@ -1,10 +1,20 @@
-import { ArrowDownCircle, ArrowUpCircle, PiggyBank, Wallet } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+    ArrowDownCircle,
+    ArrowUpCircle,
+    PiggyBank,
+    Plus,
+    Wallet,
+} from "lucide-react";
 import { CategoryChartCard, MonthlyChartCard } from "../components/ChartCard";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SummaryCard } from "../components/SummaryCard";
 import { TransactionTable } from "../components/TransactionTable";
 import { transactions } from "../data/transactions";
+import type { TransactionType } from "../types/transaction";
+
+type FilterType = "all" | TransactionType;
 
 function formatCurrency(value: number) {
     return new Intl.NumberFormat("pt-BR", {
@@ -14,6 +24,18 @@ function formatCurrency(value: number) {
 }
 
 export default function Dashboard() {
+    const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
+
+    const filteredTransactions = useMemo(() => {
+        if (selectedFilter === "all") {
+            return transactions;
+        }
+
+        return transactions.filter(
+            (transaction) => transaction.type === selectedFilter
+        );
+    }, [selectedFilter]);
+
     const totalIncome = transactions
         .filter((transaction) => transaction.type === "income")
         .reduce((acc, transaction) => acc + transaction.amount, 0);
@@ -23,7 +45,8 @@ export default function Dashboard() {
         .reduce((acc, transaction) => acc + transaction.amount, 0);
 
     const balance = totalIncome - totalExpenses;
-    const savedPercentage = Math.round((balance / totalIncome) * 100);
+    const savedPercentage =
+        totalIncome > 0 ? Math.round((balance / totalIncome) * 100) : 0;
 
     return (
         <div className="app-layout">
@@ -31,6 +54,39 @@ export default function Dashboard() {
 
             <main className="main-content">
                 <Header />
+
+                <section className="dashboard-toolbar">
+                    <div className="filter-group" aria-label="Filtro de transações">
+                        <button
+                            type="button"
+                            className={selectedFilter === "all" ? "active" : ""}
+                            onClick={() => setSelectedFilter("all")}
+                        >
+                            Todas
+                        </button>
+
+                        <button
+                            type="button"
+                            className={selectedFilter === "income" ? "active" : ""}
+                            onClick={() => setSelectedFilter("income")}
+                        >
+                            Entradas
+                        </button>
+
+                        <button
+                            type="button"
+                            className={selectedFilter === "expense" ? "active" : ""}
+                            onClick={() => setSelectedFilter("expense")}
+                        >
+                            Saídas
+                        </button>
+                    </div>
+
+                    <button type="button" className="primary-button">
+                        <Plus size={18} />
+                        Nova transação
+                    </button>
+                </section>
 
                 <section className="summary-grid">
                     <SummaryCard
@@ -69,7 +125,7 @@ export default function Dashboard() {
                     <CategoryChartCard />
                 </section>
 
-                <TransactionTable transactions={transactions} />
+                <TransactionTable transactions={filteredTransactions} />
             </main>
         </div>
     );

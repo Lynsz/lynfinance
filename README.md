@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+# LynFinance
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard financeiro pessoal desenvolvido com React e TypeScript, criado como projeto de portfólio para praticar desenvolvimento Front-End moderno, componentização, responsividade, visualização de dados e organização de código.
 
-Currently, two official plugins are available:
+## Visão geral
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+O LynFinance simula uma aplicação financeira pessoal onde o usuário consegue visualizar receitas, despesas, saldo atual, economia mensal, gráficos e histórico de transações.
 
-## React Compiler
+O projeto foi desenvolvido com foco em apresentar uma interface profissional, limpa e responsiva, adequada para portfólio de vagas de Estágio em TI, Desenvolvimento Front-End e Front-End Júnior.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funcionalidades
 
-## Expanding the ESLint configuration
+- Dashboard financeiro com visão geral do mês;
+- Cards de saldo, receitas, despesas e economia;
+- Tabela com histórico de transações;
+- Filtro por tipo de transação;
+- Gráfico de receitas x despesas;
+- Gráfico de gastos por categoria;
+- Layout responsivo;
+- Interface moderna em tema escuro;
+- Dados mockados para simulação inicial.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tecnologias utilizadas
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- CSS
+- Recharts
+- Lucide React
+- Git
+- GitHub
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Conceitos praticados
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Componentização;
+- Tipagem com TypeScript;
+- Organização de pastas;
+- Renderização de listas;
+- Filtros com estado;
+- Manipulação de dados mockados;
+- Uso de gráficos no Front-End;
+- Responsividade;
+- Boas práticas de interface;
+- Versionamento com Git e GitHub.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Estrutura do projeto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```txt
+src/
+├── components/
+│   ├── ChartCard.tsx
+│   ├── Header.tsx
+│   ├── Sidebar.tsx
+│   ├── SummaryCard.tsx
+│   └── TransactionTable.tsx
+├── data/
+│   └── transactions.ts
+├── pages/
+│   └── Dashboard.tsx
+├── types/
+│   └── transaction.ts
+├── App.tsx
+├── index.css
+└── main.tsx
