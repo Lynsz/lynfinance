@@ -524,6 +524,12 @@ td {
   background: rgba(139, 92, 246, 0.18);
 }
 
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .primary-button {
   border: 0;
   border-radius: 1rem;
@@ -555,6 +561,16 @@ td {
 
 .secondary-button:hover {
   background: rgba(148, 163, 184, 0.16);
+}
+
+.reset-button {
+  color: var(--text-secondary);
+  padding-inline: 0.9rem;
+  box-shadow: none;
+}
+
+.reset-button:hover {
+  color: var(--text-primary);
 }
 
 .empty-state {
@@ -682,6 +698,17 @@ td {
   }
 
   .primary-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .transaction-actions {
+    width: 100%;
+    flex-direction: column-reverse;
+  }
+
+  .transaction-actions .primary-button,
+  .transaction-actions .secondary-button {
     width: 100%;
     justify-content: center;
   }

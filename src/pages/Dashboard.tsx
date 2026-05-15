@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     ArrowDownCircle,
     ArrowUpCircle,
@@ -19,6 +19,7 @@ import { transactions as initialTransactions } from "../data/transactions";
 import type { Transaction, TransactionType } from "../types/transaction";
 
 type FilterType = "all" | TransactionType;
+const LYNFINANCE_TRANSACTIONS = "LYNFINANCE_TRANSACTIONS";
 
 function formatCurrency(value: number) {
     return new Intl.NumberFormat("pt-BR", {
@@ -27,11 +28,38 @@ function formatCurrency(value: number) {
     }).format(value);
 }
 
+function getStoredTransactions(): Transaction[] {
+    const storedTransactions = localStorage.getItem(LYNFINANCE_TRANSACTIONS);
+
+    if (!storedTransactions) {
+        return initialTransactions;
+    }
+
+    try {
+        const parsedTransactions = JSON.parse(storedTransactions);
+
+        if (Array.isArray(parsedTransactions)) {
+            return parsedTransactions as Transaction[];
+        }
+
+        return initialTransactions;
+    } catch {
+        return initialTransactions;
+    }
+}
+
 export default function Dashboard() {
     const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [transactions, setTransactions] =
-        useState<Transaction[]>(initialTransactions);
+        useState<Transaction[]>(getStoredTransactions);
+
+    useEffect(() => {
+        localStorage.setItem(
+            LYNFINANCE_TRANSACTIONS,
+            JSON.stringify(transactions)
+        );
+    }, [transactions]);
 
     const filteredTransactions = useMemo(() => {
         if (selectedFilter === "all") {
@@ -75,6 +103,12 @@ export default function Dashboard() {
         ]);
     }
 
+    function handleResetTransactions() {
+        localStorage.removeItem(LYNFINANCE_TRANSACTIONS);
+        setTransactions(initialTransactions);
+        setSelectedFilter("all");
+    }
+
     return (
         <div className="app-layout">
             <Sidebar />
@@ -109,14 +143,24 @@ export default function Dashboard() {
                         </button>
                     </div>
 
-                    <button
-                        type="button"
-                        className="primary-button"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        <Plus size={18} />
-                        Nova transação
-                    </button>
+                    <div className="transaction-actions">
+                        <button
+                            type="button"
+                            className="secondary-button reset-button"
+                            onClick={handleResetTransactions}
+                        >
+                            Resetar dados
+                        </button>
+
+                        <button
+                            type="button"
+                            className="primary-button"
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            <Plus size={18} />
+                            Nova transação
+                        </button>
+                    </div>
                 </section>
 
                 <section className="summary-grid">
