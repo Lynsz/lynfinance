@@ -10,9 +10,13 @@ import { CategoryChartCard, MonthlyChartCard } from "../components/ChartCard";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import { SummaryCard } from "../components/SummaryCard";
+import {
+    TransactionModal,
+    type TransactionFormData,
+} from "../components/TransactionModal";
 import { TransactionTable } from "../components/TransactionTable";
-import { transactions } from "../data/transactions";
-import type { TransactionType } from "../types/transaction";
+import { transactions as initialTransactions } from "../data/transactions";
+import type { Transaction, TransactionType } from "../types/transaction";
 
 type FilterType = "all" | TransactionType;
 
@@ -25,6 +29,9 @@ function formatCurrency(value: number) {
 
 export default function Dashboard() {
     const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [transactions, setTransactions] =
+        useState<Transaction[]>(initialTransactions);
 
     const filteredTransactions = useMemo(() => {
         if (selectedFilter === "all") {
@@ -34,19 +41,39 @@ export default function Dashboard() {
         return transactions.filter(
             (transaction) => transaction.type === selectedFilter
         );
-    }, [selectedFilter]);
+    }, [selectedFilter, transactions]);
 
-    const totalIncome = transactions
-        .filter((transaction) => transaction.type === "income")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
+    const totalIncome = useMemo(
+        () =>
+            transactions
+                .filter((transaction) => transaction.type === "income")
+                .reduce((acc, transaction) => acc + transaction.amount, 0),
+        [transactions]
+    );
 
-    const totalExpenses = transactions
-        .filter((transaction) => transaction.type === "expense")
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
+    const totalExpenses = useMemo(
+        () =>
+            transactions
+                .filter((transaction) => transaction.type === "expense")
+                .reduce((acc, transaction) => acc + transaction.amount, 0),
+        [transactions]
+    );
 
     const balance = totalIncome - totalExpenses;
     const savedPercentage =
         totalIncome > 0 ? Math.round((balance / totalIncome) * 100) : 0;
+
+    function handleAddTransaction(transactionData: TransactionFormData) {
+        const newTransaction: Transaction = {
+            id: Date.now(),
+            ...transactionData,
+        };
+
+        setTransactions((currentTransactions) => [
+            newTransaction,
+            ...currentTransactions,
+        ]);
+    }
 
     return (
         <div className="app-layout">
@@ -82,7 +109,11 @@ export default function Dashboard() {
                         </button>
                     </div>
 
-                    <button type="button" className="primary-button">
+                    <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() => setIsModalOpen(true)}
+                    >
                         <Plus size={18} />
                         Nova transação
                     </button>
@@ -127,6 +158,12 @@ export default function Dashboard() {
 
                 <TransactionTable transactions={filteredTransactions} />
             </main>
+
+            <TransactionModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={handleAddTransaction}
+            />
         </div>
     );
 }
